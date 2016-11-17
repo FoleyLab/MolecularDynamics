@@ -113,44 +113,20 @@ In the remainder of the paper, we will provide a brief overview of molecular dyn
 how macroscopic quantites are connected to the underlying microscopic information that molecular dynamics simulations directly provide.  We also provide 
 several suggestions for how to leverage these simulations for inquiry-driven excercises that can enable students to discover
 connections between microscopic and macroscopic properties of gasses, and also to develop a intuitive mental 
-model of the behavior of gasses in ideal and non-ideal regimes.  
+model of the behavior of gasses in ideal and non-ideal regimes.  We will conclude with suggestions for future advances
+that can leverage molecular simulation to advance students comprehensive of properties and processes of gasses.  
 
 \section{Overview of Molecular Dynamics Simulations}
-
-Each simulation is defined
-by an initial temperature, the number of particles being simulated, the volume in which the particles are enclosed,
-and by microscopic details of the particles, including mass and the Lennard-Jones parameters.  The initial temperature
-is used to define the distribution of initial velocities of the particles, while the volume and number of particles is used
-to define the initial positions of the particles (see Supplemental Information for more details).  The version of the code
-we provide has the Lennard-Jones parameters for Argon%\cite{MC_Reference_Ar} 
-hard-coded in, and we provide alternative Lennard-Jones parameters for other noble gasses in the supplemental information.
-The      
-
-We believe this simulation module can be an important tool towards connecting conceptual domains of macroscopic gas behavior,
-microscopic interaction pictures, and mental models of gasseous matter. 
-
-%%% What makes them hard to understane
-Studies have suggested the difficulty students have developing a functional understanding of gas properties 
-arises from misconceptions students have about the microscopic behaviors of gasses.  
-Developing a sound intuition for the behavior of gassess in the continuum of regimes between ideal and non-ideal
-behavior is challenging because we can't see them.  
-Computer simulation can help bridge this gap, allowing interactions at a variety of levels
-- Underlying physical model of intermolecular forces (L-J)
-- Kinematics resulting from that model (F=ma)
-- Emergence of Pressure and Temperature from Kinematics
-- Analysis of gas properties from emergent quantities
-- Visualization of individual trajectories and collective behavior
-- Numerical experimentation with various conditions and processes to extract and analyze properties of interest
-
-
-%%% What are we doing about it
-We present a simple implementation of MD of L-J models of Argon
-Fully functioning code with suggestions of programming excercises
-Suggestions for numerical excercises
-Tailored for interfacing with open-source visualization software
- 
-\section{Molecular Dynamics}
-MD solves newton's equations
+Aneesur Rahman is credited as the pioneer of Molecular Dynamics (MD) simulations, having developed the first computer
+program to simulate the motion of a system of 864 Argon atoms in 1964.%~\cite{Rahman}
+The underlying concept behind MD simulations is remarkably simple:  atoms and molecules exert forces on one another that affect their motion,
+and the changes in motion due to these forces can be predicted to high accuracy by solving classical equations of motion (i.e. Newton's Law).
+This is conceptually  
+The two challenges are therefore the specification of the appropriate forces and the solution of the equations of motion   
+In fact, 
+Solving microscopic classical equations of motion (i.e. Newton's Law) 
+for a system of many particles is at the heart of 
+any molecular dynamics simulation.   
 \begin{equation}
 \vec{a}_i(t) = \vec{F}_i(t) / m
 \end{equation}
@@ -187,18 +163,33 @@ MVS
 
 The thermodynamic pressure and temperature can be determiend from the time average of
 the instantaneous $T$ and $P$.  
-%We have found that many students receiving traditional lecture
-%instruction fail to develop a functional understanding of the ideal gas law in several
-%respects. Students have difficulty (1) relating the quantities in the ideal gas law to a
-%given physical situation and (2) making predictions and comparisons about one or
-%more gas samples on the basis of the ideal gas law. The data suggest that incorrect
-%ideas that students have about the particles and processes at the microscopic level
-%often contribute to their difficulties with this material. Furthermore, difficulties with
-%mechanics may impede the development of an understanding of thermal physics.
-%We have begun to use the research results described in this paper to guide the
-%development of curriculum to address the specific difficulties that we have found.
-%Preliminary results indicate that such special instruction can help address student
-%difficulties.
+
+Each simulation is defined
+by an initial temperature, the number of particles being simulated, the volume in which the particles are enclosed,
+and by microscopic details of the particles, including mass and the Lennard-Jones parameters.  The initial temperature
+is used to define the distribution of initial velocities of the particles, while the volume and number of particles is used
+to define the initial positions of the particles (see Supplemental Information for more details).  The version of the code
+we provide has the Lennard-Jones parameters for Argon%\cite{MC_Reference_Ar}
+hard-coded in, and we provide alternative Lennard-Jones parameters for other noble gasses in the supplemental information.
+The
+
+We believe this simulation module can be an important tool towards connecting conceptual domains of macroscopic gas behavior,
+microscopic interaction pictures, and mental models of gasseous matter.
+
+%%% What makes them hard to understane
+Studies have suggested the difficulty students have developing a functional understanding of gas properties
+arises from misconceptions students have about the microscopic behaviors of gasses.
+Developing a sound intuition for the behavior of gassess in the continuum of regimes between ideal and non-ideal
+behavior is challenging because we can't see them.
+Computer simulation can help bridge this gap, allowing interactions at a variety of levels
+- Underlying physical model of intermolecular forces (L-J)
+- Kinematics resulting from that model (F=ma)
+- Emergence of Pressure and Temperature from Kinematics
+- Analysis of gas properties from emergent quantities
+- Visualization of individual trajectories and collective behavior
+- Numerical experimentation with various conditions and processes to extract and analyze properties of interest
+
+
 
 
 \section{Associated Content}
