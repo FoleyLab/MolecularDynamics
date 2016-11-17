@@ -109,7 +109,7 @@ compute macroscopic quantities including the temperature, pressure, and compress
 of deviation from ideality) from the time-average of the molecular dynamics trajectories.  Microscopic quantities like the kinetic
 and potential energy of individual particles are also readily computed.  
 
-In the remainder of the paper, we will provide a brief overview of molecular dynamics simulations, particularly focusing on 
+In the remainder of the paper, we will provide a brief description of molecular dynamics simulations, particularly focusing on 
 how macroscopic quantites are connected to the underlying microscopic information that molecular dynamics simulations directly provide.  We also provide 
 several suggestions for how to leverage these simulations for inquiry-driven excercises that can enable students to discover
 connections between microscopic and macroscopic properties of gasses, and also to develop a intuitive mental 
@@ -121,8 +121,38 @@ Aneesur Rahman is credited as the pioneer of Molecular Dynamics (MD) simulations
 program to simulate the motion of a system of 864 Argon atoms in 1964.%~\cite{Rahman}
 The underlying concept behind MD simulations is remarkably simple:  atoms and molecules exert forces on one another that affect their motion,
 and the changes in motion due to these forces can be predicted to high accuracy by solving classical equations of motion (i.e. Newton's Law).
-This is conceptually  
-The two challenges are therefore the specification of the appropriate forces and the solution of the equations of motion   
+This is concept is similar in spirit to the types of kinematics problems students encounter in first year physics: identify
+the forces acting on a particle (e.g. a baseball), then find its position and velocity at some time in the future given its current
+position and velocity along with its mass.  
+The two challenges in the case of MD simulations are the calculation of the appropriate forces on the particles and the 
+solution of the equations of
+Newton's Law for the very large number of particles that arise in typical simulations.  A variety of computer algorithms are
+available that permit Newton's Law to be solved for many thousands of atoms even with modest computational resources.
+The typical approach to calculating the forces is first to specify a potential energy function for the particles
+that models the change in potential energy due to the attractive interactions atoms and molecules experience
+at moderate separations, and the repulsive interactions they experience at small separations.  The forces on the particles
+are then calculated from the derivative of this function;
+\begin{equation}
+F_i = \sum_{j \neq i}^N - \frac{d V( r_{ij} }{d r_{ij}}.
+\end{equation}
+In the above expression, $F_i$ is the total force experienced on the $i^{th}$ particle in a $N$ particle system
+due to its interaction with all of the remaining $N-1$ particles, and $r_{ij}$ is the separation between
+particles $i$ and $j$.  This expression assumes pair-wise interactions only contribute to the forces, this assumption
+can be very poor in some systems (e.g. water), as has been discussed extensively (see, for example, ....).  
+In Rahman's original work, and in the present work, an simple pair potential known as the Lennard-Jones potential 
+is used,
+\begin{equation}
+V(r_{ij}) = 4 \epsilon \left( \left( \frac{\sigma}{r_{ij}} \right)^{12} - \left(\frac{\sigma}{r_{ij}} \right)^6 \right),
+\end{equation}
+where the $\epsilon$ parameter defines the interaction strength and the $\sigma$ parameter defines the effective
+lengthscale of the interactions, which could be analogized to concepts like the Van der Waals radius of the atom or molecule.
+The specific value of these parameters can be obtained by experimental and theoretical methods.  Remarkably, Rahman's early
+work simulating liquid Argon showed that this simple potential leads to the emergence of a large number of macroscopic properties 
+that tracked experimental measurements with surprising fidelit. %\cite{Rahman}.
+Importantly, the derivative of the L-J potential is smooth everywhere, which means the force is well defined
+at all separations.  
+
+The 
 In fact, 
 Solving microscopic classical equations of motion (i.e. Newton's Law) 
 for a system of many particles is at the heart of 
