@@ -126,8 +126,21 @@ the forces acting on a particle (e.g. a baseball), then find its position and ve
 position and velocity along with its mass.  
 The two challenges in the case of MD simulations are the calculation of the appropriate forces on the particles and the 
 solution of the equations of
-Newton's Law for the very large number of particles that arise in typical simulations.  A variety of computer algorithms are
+Newton's Law for the very large number $N$ of particles that arise in typical simulations.  A variety of computer algorithms are
 available that permit Newton's Law to be solved for many thousands of atoms even with modest computational resources.
+In this work, we utilize the velocity verlet algorithm to update the positions and velocities of
+the particles once the forces have been computed.     
+Position update:
+\begin{equation}
+\vec{r}_{i}(t+1) += \vec{v}_i(t) \: dt + \frac{1}{2} \vec{a}_i(t) \: dt^2 
+\end{equation}
+
+Velocity updates:
+\begin{equation}
+\vec{v}_i (t+1) += \frac{1}{2} \vec{a}_i(t) \: dt
+\end{equation}
+
+
 The typical approach to calculating the forces is first to specify a potential energy function for the particles
 that models the change in potential energy due to the attractive interactions atoms and molecules experience
 at moderate separations, and the repulsive interactions they experience at small separations.  The forces on the particles
@@ -166,15 +179,6 @@ where force comes from
 \vec{F}_i(t) = -\frac{ \partial V( \vec{r}_i(t) ) }{ \partial r}
 \end{equation}
 
-Position update:
-\begin{equation}
-\vec{r}_{i}(t+1) += \vec{v}_i(t) \: dt + \frac{1}{2} \vec{a}_i(t) \: dt^2 
-\end{equation}
-
-Velocity updates:
-\begin{equation}
-\vec{v}_i (t+1) += \frac{1}{2} \vec{a}_i(t) \: dt
-\end{equation}
 
 Pressure
 \begin{equation}
