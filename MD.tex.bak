@@ -37,13 +37,13 @@ and clarifying fundamental concepts of particulate nature of matter and gas prop
 (b) programming kinetic theory expressions that connect the microscopic quantities
     that are directly computed by MD simulations (velocity, change in momentum) to 
     macroscopic quantities T and P
-(c) Novel opportunities to quantitatively and qualitatively evaluate deviations from ideal gas behavior.  
+(c) Novel opportunities to quantitatively and qualitiatively evaluate deviations from ideal gas behavior.  
 A simple and fully-functional molecular dynamics code is provided written in simple C code that can be compiled
 and run on Windows, Mac, and Linux platforms.
 
-Exercises:
+Excercises:
 (1)  Compute R and Z for several scenarios, visualize trajectories, compare Z to VDW equation
-(2)  Determine Boyle temperatures
+(2)  Determine Boyl temperatures
 (3)  Compare isotherms with VDW equation
 
 %This manuscript presents an exercise that utilizes
@@ -83,19 +83,19 @@ Chemistry students encounter the ideal gas law throughout their education and in
 The ideal gas law is an important part of the particle theory of matter, and is useful in illustrating and quantifying
 the relationships between different measurable quantities that characterize a gas system.  The ideal gas law is also 
 used extensively to motivate thermodynamic processes and cycles, and the changes in energy and entropy associated with them.  
-Gasses also provide arguably the simplest regime for analyzing inter-molecular interactions.  The fact that the ideal gas law
-has such remarkable predictive power in a variety of circumstances despite its neglect of inter-molecular interactions illustrates
-important concepts about the distance dependence of these forces.  That is, the average inter-molecular distance is large in 
-low-density gasses, therefore the average inter-molecular force is negligible.  Despite repeated exposure,
+Gasses also provide arguably the simplest regime for analyzing intermolecular interactions.  The fact that the ideal gas law
+has such remarkable predictive power in a variety of circumstances despite its neglect of intermolecular interactions illustrates
+important concepts about the distance dependence of these forces.  That is, the average intermolecular distance is large in 
+low-density gasses, therefore the average intermolecular force is negligible.  Despite repeated exposure,
 undergraduate chemistry students struggle to develop both a functional understanding of the 
 ideal gas law%\cite{}, 
 and a solid conceptual understanding of the assumptions that define the ideal gas model (non-interacting point masses 
 that undergo elastic collisions with the walls of their container).  We have observed in our own Physical Chemistry curriculum 
 that students also struggle to develop a functional
 understanding of ``real gas'' equations of state (e.g. Van der Waals equation) and sound
-physical intuition about the microscopic inter-molecular forces in gasses.  We conjecture that macroscopic equations of state,
-microscopic models of inter-molecular forces, and mental pictures of gaseous matter tend to lie in different conceptual domains, and
-that this creates an impediment to a deep understanding of gas properties and behaviors across a variety of chemically relevant contexts.
+physical intuition about the microscopic intermolecular forces in gasses.  We conjecture that macroscopic equations of state,
+microscopic models of intermolecular forces, and mental pictures of gaseous matter tend to lie in different conceptual domains, and
+that this creates an impediment to a deep understanding of gas properties and behaviors across a vareity of chemically relevant contexts.
 
 In this paper, we present a simulation module that can aid inquiry-driven study of gasses across
 the continuum of regimes between ideal and non-ideal behavior.  The full commented source code of this simulation,
@@ -110,8 +110,8 @@ of deviation from ideality) from the time-average of the molecular dynamics traj
 and potential energy of individual particles are also readily computed.  
 
 In the remainder of the paper, we will provide an overview of the salient details of molecular dynamics simulations, including
-a discussion of how macroscopic quantities are connected to the underlying microscopic information that molecular dynamics simulations directly provide.  We also provide 
-several suggestions for how to leverage these simulations for inquiry-driven exercises that can enable students to discover
+a discussion of how macroscopic quantites are connected to the underlying microscopic information that molecular dynamics simulations directly provide.  We also provide 
+several suggestions for how to leverage these simulations for inquiry-driven excercises that can enable students to discover
 connections between microscopic and macroscopic properties of gasses, and also to develop a intuitive mental 
 model of the behavior of gasses in ideal and non-ideal regimes.  We will conclude with suggestions for future advances
 that can leverage molecular simulation to advance students comprehensive of properties and processes of gasses.  
@@ -168,10 +168,10 @@ is used,
 V( \vec{r}_{ij}) = 4 \epsilon \left( \left( \frac{\sigma}{\vec{r}_{ij}} \right)^{12} - \left(\frac{\sigma}{\vec{r}_{ij}} \right)^6 \right),
 \end{equation}
 where the $\epsilon$ parameter defines the interaction strength and the $\sigma$ parameter defines the effective
-length-scale of the interactions, which could be analogized to concepts like the Van der Waals radius of the atom or molecule.
+lengthscale of the interactions, which could be analogized to concepts like the Van der Waals radius of the atom or molecule.
 The specific value of these parameters can be obtained by experimental and theoretical methods.  Remarkably, Rahman's early
 work simulating liquid Argon showed that this simple potential leads to the emergence of a large number of macroscopic properties 
-that tracked experimental measurements with surprising fidelity. %\cite{Rahman}.
+that tracked experimental measurements with surprising fidelit. %\cite{Rahman}.
 Importantly, the derivative of the L-J potential is smooth everywhere, which means the force is well defined
 at all separations, 
 \begin{equation}\label{LJF}
@@ -203,7 +203,7 @@ where the mean squared velocity is defined as
 \begin{equation}
 \langle v^2 \rangle = \frac{1}{N} sum_i^N \vec{v}_i(t)
 \end{equation}
-The thermodynamic pressure and temperature can be determined from the time average of
+The thermodynamic pressure and temperature can be determiend from the time average of
 the instantaneous $T$ and $P$.  
 
 %Each simulation is defined
