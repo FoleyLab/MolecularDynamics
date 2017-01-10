@@ -2,8 +2,6 @@
 #include<stdlib.h>
 #include<math.h>
 #include<string.h>
-#include<malloc.h>
-#include<complex.h>
 
 
 // Number of particles
