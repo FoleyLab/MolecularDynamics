@@ -1,6 +1,6 @@
-NumberOfParticles       5000
+NumberOfParticles       500
 TrajectoryFileName      Trajectory_N_5_V_1e4_T_1.0.xyz
 InstantaneousFileName   Output_N_5_V_1e4_T_1.0.txt
-AverageFileName         Average_N_5_V_1e4_T_1.0.txt
-Volume_NaturalUnits     1e4
+AverageFileName         Avgerage_N_5_V_1e4_T_1.0.txt
+Volume_NaturalUnits     1e5
 Tinit_NaturalUnits      1.0

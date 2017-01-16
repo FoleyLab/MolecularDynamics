@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include<string.h>
-
+#include<malloc.h>
 
 // Number of particles
 int N;
@@ -34,25 +34,38 @@ double a[MAXPART][3];
 double F[MAXPART][3];
 
 //  Function prototypes
-void initialize();
-double VelocityVerlet(double dt, int iter, FILE *fp);
+//  initialize positions on simple cubic lattice, also calls function to initialize velocities
+void initialize();  
+//  update positions and velocities using Velocity Verlet algorithm 
+//  print particle coordinates to file for rendering via VMD or other animation software
+//  return 'instantaneous pressure'
+double VelocityVerlet(double dt, int iter, FILE *fp);  
+//  Compute Force using F = -dV/dr
+//  solve F = ma for use in Velocity Verlet
 void computeAccelerations();
-double gasdev();
+//  Numerical Recipes function for generation gaussian distribution
+double gaussdist();
+//  Initialize velocities according to user-supplied initial Temperature (Tinit)
 void initializeVelocities();
+//  Compute total potential energy from particle coordinates
 double Potential();
-double MeanVelocitySquared();
+//  Compute mean squared velocity from particle velocities
+double MeanSquaredVelocity();
+//  Compute total kinetic energy from particle mass and velocities
 double Kinetic();
 
 int main()
 {
 
-  int i, tmax;
+  //  variable delcarations
+  int i;
   double dt, Vol, Temp, Press, Pavg, Tavg;
   double VolFac, TempFac, PressFac;
   double KE, PE, mvs, gc, Z;
   char *trash, *tfn, *ofn, *afn;
   FILE *infp, *tfp, *ofp, *afp;
 
+  //  open file with input parameters
   infp = fopen("input.txt","r");
 
   // Character arrays for file names - to be assigned after reading input file
@@ -61,6 +74,7 @@ int main()
   ofn      = (char *)malloc(1000*sizeof(char));
   afn      = (char *)malloc(1000*sizeof(char));
 
+  //  read input parameters from "input.txt"
   fscanf(infp,"%s",trash);  // The Word NumberOfParticles
   fscanf(infp,"%i",&N);     // Number of Particles
   fscanf(infp,"%s",trash);  // The Word TrajectoryFileName
@@ -74,14 +88,17 @@ int main()
   fscanf(infp,"%s",trash);
   fscanf(infp,"%lf",&Tinit);
 
+  //  Limiting N to MAXPART for practical reasons
   if (N>=MAXPART) {
 
-    printf("  MAXIMUM NUMBER OF PARTICLES IS 5000!\n\n  PLEASE ADJUST YOUR INPUT FILE ACCORDINGLY \n\n");
+    printf("  MAXIMUM NUMBER OF PARTICLES IS %i\n\n  PLEASE ADJUST YOUR INPUT FILE ACCORDINGLY \n\n", MAXPART);
     exit(0);
 
   }
 
   fclose(infp);
+
+
   // Vol = L*L*L;
   // Length of the box in natural units:
   L = pow(Vol,(1./3));
@@ -94,7 +111,7 @@ int main()
   *     Mol. Phys., Vol. 21, 657-673 (1971)
   *
   *     mass:     6.633e-26 kg          = one natural unit of mass for argon, by definition
-  *     energy:   1.02919095e-21 J      = one natural unit of energy for argon, directly from L-J parameters
+  *     energy:   1.96183e-21 J      = one natural unit of energy for argon, directly from L-J parameters
   *     length:   3.3605e-10  m         = one natural unit of length for argon, directly from L-J parameters
   *     volume:   3.79499-29 m^3        = one natural unit of volume for argon, by length^3
   *     time:     1.951e-12 s           = one natural unit of time for argon, by length*sqrt(mass/energy)
@@ -113,12 +130,6 @@ int main()
   ofp = fopen(ofn,"w");     //  Output of other quantities (T, P, gc, etc) at every timestep
   afp = fopen(afn,"w");    //  Average T, P, gc, etc from the simulation
 
-  //  These are matrices that will store data about the system
-  /*r = MAT_DOUBLE(N, 3);  //  stores the position of each of the N particles in the simulation
-  v = MAT_DOUBLE(N, 3);  //  stores the velocity of each of the N particles in the simulation
-  a = MAT_DOUBLE(N, 3);  //  stores the acceleration of each of the N particles in the simulation
-  F = MAT_DOUBLE(N, 3);  //  stores the intermolecular forces on each of the N particles in the simulation
-*/
   dt = 0.01;  // dt = 0.01 natural units of time!
 
   //  Put all the atoms in simple crystal lattice and give them random velocities
@@ -156,7 +167,7 @@ int main()
     //  Instantaneous mean velocity squared, Temperature, Pressure
     //  Potential, and Kinetic Energy
     //  We would also like to use the IGL to try to see if we can extract the gas constant
-    mvs = MeanVelocitySquared();
+    mvs = MeanSquaredVelocity();
     KE = Kinetic();
     PE = Potential();
 
@@ -243,11 +254,9 @@ void initialize() {
 
 }   
 
-//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  HERE IS WHERE WE WILL ADD FUNCTIONS TO OUR CODE!
 
 //  Function to calculate the averaged velocity squared
-double MeanVelocitySquared() { 
+double MeanSquaredVelocity() { 
 
   double vx2 = 0;
   double vy2 = 0;
@@ -391,18 +400,15 @@ double VelocityVerlet(double dt, int iter, FILE *fp) {
     for (j=0; j<3; j++) {
        if (r[i][j]<0.) {
          v[i][j] *=-1.; //- elastic walls
-         //r[i][j] += L;  // PBC
-         psum += 2*m*fabs(v[i][j])/dt;
+         psum += 2*m*fabs(v[i][j])/dt;  // contribution to pressure from "left" walls
        }
        if (r[i][j]>=L) {
          v[i][j]*=-1.;  //- elastic walls
-         //r[i][j] -= L;  // PBC
-         psum += 2*m*fabs(v[i][j])/dt;
+         psum += 2*m*fabs(v[i][j])/dt;  // contribution to pressure from "right" walls
        }
     }
   }
 
-  //fprintf(fp,"#%i",iter);
   for (i=0; i<N; i++) {
     fprintf(fp," Ar  ");
     for (j=0; j<3; j++) {
@@ -424,7 +430,7 @@ void initializeVelocities() {
 
     for (j=0; j<3; j++) {
       //  Pull a number from a Gaussian Distribution
-      v[i][j] = gasdev();
+      v[i][j] = gaussdist();
 
     }
   }
@@ -481,7 +487,7 @@ void initializeVelocities() {
 
 
 //  Numerical recipes Gaussian distribution number generator
-double gasdev() {
+double gaussdist() {
   static bool available = false;
   static double gset;
   double fac, rsq, v1, v2;
