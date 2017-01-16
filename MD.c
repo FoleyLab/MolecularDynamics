@@ -60,7 +60,7 @@ int main()
   //  variable delcarations
   int i;
   double dt, Vol, Temp, Press, Pavg, Tavg;
-  double VolFac, TempFac, PressFac;
+  double VolFac, TempFac, PressFac, timefac;
   double KE, PE, mvs, gc, Z;
   char *trash, *tfn, *ofn, *afn;
   FILE *infp, *tfp, *ofp, *afp;
@@ -124,6 +124,7 @@ int main()
   VolFac = 3.7949992920124995e-29;
   PressFac = 51695201.06691862;
   TempFac = 142.0950000000000;
+  timefac = 2.09618e-12;
 
   //  Files that we can write different quantities to
   tfp = fopen(tfn,"w");     //  The MD trajectory, coordinates of every particle at each timestep
@@ -194,8 +195,9 @@ int main()
   Tavg /= NumTime;
   Z = Pavg*(Vol*VolFac)/(N*kBSI*Tavg);
   gc = NA*Pavg*(Vol*VolFac)/(N*Tavg);
-
-  fprintf(afp,"  %8.4f  %20.8f  %20.8f  %10.6f  %10.6f  %12.10e  %i\n",i*dt,Tavg,Pavg,gc,Z,Vol,N);
+  fprintf(afp,"  Total Time (s)      T (K)               P (Pa)        R (J/(mol K))         Z           V (L^3)              N\n");
+  fprintf(afp," --------------   -----------        ---------------   --------------   ---------------   ------------   -----------\n");
+  fprintf(afp,"  %8.4e  %15.5f       %15.5f     %10.5f       %10.5f        %10.5e         %i\n",i*dt*timefac,Tavg,Pavg,gc,Z,Vol*VolFac,N);
 
 
   
