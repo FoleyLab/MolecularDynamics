@@ -1,6 +1,7 @@
 /*
-  MD.c - a simple molecular dynamics program for simulating 'real gas' properties
-    Copyright (C) 2016  Jonathan J. Foley IV
+  MD.c - a simple molecular dynamics program for simulating real gas properties of Lennard-Jones particles.
+  
+    Copyright (C) 2016  Jonathan J. Foley IV, Chelsea Sweet, Oyewumi Akinfenwa
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
