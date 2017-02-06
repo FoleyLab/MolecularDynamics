@@ -27,7 +27,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include<string.h>
-#include<malloc.h>
+
 
 // Number of particles
 int N;
@@ -87,17 +87,13 @@ int main()
   double dt, Vol, Temp, Press, Pavg, Tavg;
   double VolFac, TempFac, PressFac, timefac;
   double KE, PE, mvs, gc, Z;
-  char *trash, *tfn, *ofn, *afn;
+  char trash[1000], tfn[1000], ofn[1000], afn[1000];
   FILE *infp, *tfp, *ofp, *afp;
 
   //  open file with input parameters
   infp = fopen("input.txt","r");
 
-  // Character arrays for file names - to be assigned after reading input file
-  trash    = (char *)malloc(1000*sizeof(char));
-  tfn      = (char *)malloc(1000*sizeof(char));
-  ofn      = (char *)malloc(1000*sizeof(char));
-  afn      = (char *)malloc(1000*sizeof(char));
+
 
   //  read input parameters from "input.txt"
   fscanf(infp,"%s",trash);  // The Word NumberOfParticles
@@ -220,7 +216,7 @@ int main()
   Tavg /= NumTime;
   Z = Pavg*(Vol*VolFac)/(N*kBSI*Tavg);
   gc = NA*Pavg*(Vol*VolFac)/(N*Tavg);
-  fprintf(afp,"  Total Time (s)      T (K)               P (Pa)        R (J/(mol K))         Z           V (L^3)              N\n");
+  fprintf(afp,"  Total Time (s)      T (K)               P (Pa)        R (J/(mol K))         Z           V (m^3)              N\n");
   fprintf(afp," --------------   -----------        ---------------   --------------   ---------------   ------------   -----------\n");
   fprintf(afp,"  %8.4e  %15.5f       %15.5f     %10.5f       %10.5f        %10.5e         %i\n",i*dt*timefac,Tavg,Pavg,gc,Z,Vol*VolFac,N);
 
