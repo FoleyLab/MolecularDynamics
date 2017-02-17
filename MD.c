@@ -108,18 +108,27 @@ int main()
   fscanf(infp,"%lf",&Vol);   // Volume of the box in natural units
   fscanf(infp,"%s",trash);
   fscanf(infp,"%lf",&Tinit);
+  fclose(infp);
 
   //  Limiting N to MAXPART for practical reasons
   if (N>=MAXPART) {
 
-    printf("  MAXIMUM NUMBER OF PARTICLES IS %i\n\n  PLEASE ADJUST YOUR INPUT FILE ACCORDINGLY \n\n", MAXPART);
+    printf("\n\n\n  MAXIMUM NUMBER OF PARTICLES IS %i\n\n  PLEASE ADJUST YOUR INPUT FILE ACCORDINGLY \n\n", MAXPART);
     exit(0);
 
   }
+  //  Check to see if the volume makes sense - is it too small?
+  //  Remember VDW radius of the particles is 1 natural unit of length
+  //  and volume = L*L*L, so if V = N*L*L*L = N, then all the particles
+  //  will be initialized with an interparticle separation equal to 2xVDW radius
+  if (Vol<N) {
 
-  fclose(infp);
-
-
+    printf("\n\n\n  YOUR DENSITY IS VERY HIGH!\n\n");
+    printf("  THE NUMBER OF PARTICLES IS %i AND THE AVAILABLE VOLUME IS %f NATURAL UNITS\n",N,Vol);
+    printf("  SIMULATIONS WITH DENSITY GREATER THAN 1 PARTCICLE/(1 Natural Unit of Volume) MAY DIVERGE\n");
+    printf("  PLEASE ADJUST YOUR INPUT FILE ACCORDINGLY AND RETRY\n\n");
+    exit(0);
+  }
   // Vol = L*L*L;
   // Length of the box in natural units:
   L = pow(Vol,(1./3));
