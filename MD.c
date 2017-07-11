@@ -156,12 +156,10 @@ int main()
   printf("  NUMBER DENSITY OF LIQUID ARGON AT 1 ATM AND 87 K IS ABOUT 35000 moles/m^3\n");
 
   scanf("%lf",&rho);
-  N = 500;
-  //printf("\n\n  ENTER THE NUMBER OF PARTICLES\n");
-  //scanf("%i",&N);
+  N = 216;
   Vol = N/(rho*NA);
 
-  printf("  Vol is %12.10e\n",Vol/VolFac);
+  Vol /= VolFac;
 
   //  Limiting N to MAXPART for practical reasons
   if (N>=MAXPART) {
