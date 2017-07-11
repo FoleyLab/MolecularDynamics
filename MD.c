@@ -84,31 +84,84 @@ int main()
 
   //  variable delcarations
   int i;
-  double dt, Vol, Temp, Press, Pavg, Tavg;
+  double dt, Vol, Temp, Press, Pavg, Tavg, rho;
   double VolFac, TempFac, PressFac, timefac;
   double KE, PE, mvs, gc, Z;
-  char trash[1000], tfn[1000], ofn[1000], afn[1000];
+  char trash[10000], prefix[1000], tfn[1000], ofn[1000], afn[1000];
   FILE *infp, *tfp, *ofp, *afp;
 
-  //  open file with input parameters
-  infp = fopen("input.txt","r");
+
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("                  WELCOME TO WILLY P CHEM MD!\n");
+  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("\n  ENTER A TITLE FOR YOUR CALCULATION!\n");
+  scanf("%s",prefix);
+  strcpy(tfn,prefix);
+  strcat(tfn,"_traj.xyz");
+  strcpy(ofn,prefix);
+  strcat(ofn,"_output.txt");
+  strcpy(afn,prefix);
+  strcat(afn,"_average.txt");
+
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("                  TITLE ENTERED AS '%s'\n",prefix);
+  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 
 
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("  ARE YOU READY TO PROCEED WITH THE SIMULATION?\n");  
+  printf("  TYPE 'yes' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  scanf("%s",trash);
 
-  //  read input parameters from "input.txt"
-  fscanf(infp,"%s",trash);  // The Word NumberOfParticles
-  fscanf(infp,"%i",&N);     // Number of Particles
-  fscanf(infp,"%s",trash);  // The Word TrajectoryFileName
-  fscanf(infp,"%s",tfn);    // Trajectory File Name
-  fscanf(infp,"%s",trash);  // The Word InstantaneousOutputFileName
-  fscanf(infp,"%s",ofn);     // InstantaneousOutputFileName
-  fscanf(infp,"%s",trash);  // The Word AverageFileName
-  fscanf(infp,"%s",afn);     // AverageFileName
-  fscanf(infp,"%s",trash);   // The word Volume
-  fscanf(infp,"%lf",&Vol);   // Volume of the box in natural units
-  fscanf(infp,"%s",trash);
-  fscanf(infp,"%lf",&Tinit);
-  fclose(infp);
+ /*     Table of values for Argon relating natural units to SI units:
+  *     These are derived from Lennard-Jones parameters from the article
+  *     "Liquid argon: Monte carlo and molecular dynamics calculations"
+  *     J.A. Barker , R.A. Fisher & R.O. Watts
+  *     Mol. Phys., Vol. 21, 657-673 (1971)
+  *
+  *     mass:     6.633e-26 kg          = one natural unit of mass for argon, by definition
+  *     energy:   1.96183e-21 J      = one natural unit of energy for argon, directly from L-J parameters
+  *     length:   3.3605e-10  m         = one natural unit of length for argon, directly from L-J parameters
+  *     volume:   3.79499-29 m^3        = one natural unit of volume for argon, by length^3
+  *     time:     1.951e-12 s           = one natural unit of time for argon, by length*sqrt(mass/energy)
+  ***************************************************************************************/
+
+  //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //  Edit these factors to be computed in terms of basic properties in natural units of 
+  //  the gas being simulated
+
+  VolFac = 3.7949992920124995e-29;
+  PressFac = 51695201.06691862;
+  TempFac = 142.0950000000000;
+  timefac = 2.09618e-12;
+
+
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("\n  YOU WILL NOW ENTER A FEW SIMULATION PARAMETERS\n");
+  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("\n\n  ENTER THE INTIAL TEMPERATURE OF YOUR GAS IN KELVIN\n");
+  scanf("%lf",&Tinit);
+  // Make sure temperature is a positive number!
+  if (Tinit<0.) {
+    printf("\n  !!!!! ABSOLUTE TEMPERATURE MUST BE A POSITIVE NUMBER!  PLEASE TRY AGAIN WITH A POSITIVE TEMPERATURE!!!\n");
+    exit(0);
+  }
+  // Convert initial temperature from kelvin to natural units
+  Tinit /= TempFac;
+
+
+  printf("\n\n  ENTER THE NUMBER DENSITY IN moles/m^3\n");
+  printf("  FOR REFERENCE, NUMBER DENSITY OF AN IDEAL GAS AT STP IS ABOUT 40 moles/m^3\n");
+  printf("  NUMBER DENSITY OF LIQUID ARGON AT 1 ATM AND 87 K IS ABOUT 35000 moles/m^3\n");
+
+  scanf("%lf",&rho);
+  N = 500;
+  //printf("\n\n  ENTER THE NUMBER OF PARTICLES\n");
+  //scanf("%i",&N);
+  Vol = N/(rho*NA);
+
+  printf("  Vol is %12.10e\n",Vol/VolFac);
 
   //  Limiting N to MAXPART for practical reasons
   if (N>=MAXPART) {
@@ -132,29 +185,6 @@ int main()
   // Vol = L*L*L;
   // Length of the box in natural units:
   L = pow(Vol,(1./3));
-
-
- /*     Table of values for Argon relating natural units to SI units:
-  *     These are derived from Lennard-Jones parameters from the article
-  *     "Liquid argon: Monte carlo and molecular dynamics calculations"
-  *     J.A. Barker , R.A. Fisher & R.O. Watts
-  *     Mol. Phys., Vol. 21, 657-673 (1971)
-  *
-  *     mass:     6.633e-26 kg          = one natural unit of mass for argon, by definition
-  *     energy:   1.96183e-21 J      = one natural unit of energy for argon, directly from L-J parameters
-  *     length:   3.3605e-10  m         = one natural unit of length for argon, directly from L-J parameters
-  *     volume:   3.79499-29 m^3        = one natural unit of volume for argon, by length^3
-  *     time:     1.951e-12 s           = one natural unit of time for argon, by length*sqrt(mass/energy)
-  ***************************************************************************************/
-
-  //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //  Edit these factors to be computed in terms of basic properties in natural units of 
-  //  the gas being simulated
-
-  VolFac = 3.7949992920124995e-29;
-  PressFac = 51695201.06691862;
-  TempFac = 142.0950000000000;
-  timefac = 2.09618e-12;
 
   //  Files that we can write different quantities to
   tfp = fopen(tfn,"w");     //  The MD trajectory, coordinates of every particle at each timestep
@@ -184,15 +214,31 @@ int main()
   //  We will run the simulation for NumTime timesteps.
   //  The total time will be NumTime*dt in natural units
   //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
-  
-  int NumTime=2500;
-  for (i=0; i<NumTime; i++) {
+  int NumTime=50000;
+  int tenp = floor(NumTime/10);
+  printf("  PERCENTAGE OF CALCULATION COMPLETE:\n  [");
+  for (i=0; i<NumTime+1; i++) {
+
+    //  This just prints updates on progress of the calculation for the users convenience
+    if (i==tenp) printf(" 10 |");
+    else if (i==2*tenp) printf(" 20 |");
+    else if (i==3*tenp) printf(" 30 |");
+    else if (i==4*tenp) printf(" 40 |");
+    else if (i==5*tenp) printf(" 50 |");
+    else if (i==6*tenp) printf(" 60 |");
+    else if (i==7*tenp) printf(" 70 |");
+    else if (i==8*tenp) printf(" 80 |");
+    else if (i==9*tenp) printf(" 90 |");
+    else if (i==10*tenp) printf(" 100 ]\n");
+    fflush(stdout);
+
 
     // This updates the positions and velocities using Newton's Laws
     // Also computes the Pressure as the sum of momentum changes from wall collisions / timestep
     // which is a Kinetic Theory of gasses concept of Pressure
     Press = VelocityVerlet(dt, i+1, tfp);
     Press *= PressFac;
+
     //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //  Now we would like to calculate somethings about the system:
     //  Instantaneous mean velocity squared, Temperature, Pressure
@@ -228,6 +274,12 @@ int main()
   fprintf(afp,"  Total Time (s)      T (K)               P (Pa)        R (J/(mol K))         Z           V (m^3)              N\n");
   fprintf(afp," --------------   -----------        ---------------   --------------   ---------------   ------------   -----------\n");
   fprintf(afp,"  %8.4e  %15.5f       %15.5f     %10.5f       %10.5f        %10.5e         %i\n",i*dt*timefac,Tavg,Pavg,gc,Z,Vol*VolFac,N);
+
+  printf("\n  TO ANIMATE YOUR SIMULATION, OPEN THE FILE \n  '%s' WITH VMD AFTER THE SIMULATION COMPLETES\n",tfn);
+  printf("\n  TO ANALYZE INSTANTANEOUS DATA ABOUT YOUR MOLECULE, OPEN THE FILE \n  '%s' WITH YOUR FAVORITE TEXT EDITOR OR IMPORT THE DATA INTO EXCEL\n",ofn);
+  printf("\n  THE FOLLOWING THERMODYNAMIC AVERAGES WILL BE COMPUTED AND WRITTEN TO THE FILE  \n  '%s':\n",afn);
+  printf("\n  AVERAGE TEMPERATURE (K)\n  AVERAGE PRESSURE (kPa) \n  THE GAS CONSTANT (J * mol^-1 K^-1)\n  THE COMPRESSIBILITY (unitless) \n  TOTAL VOLUME (L) \n  NUMBER OF PARTICLES (unitless \n");
+
 
 
   
