@@ -58,6 +58,8 @@ double a[MAXPART][3];
 //  Force
 double F[MAXPART][3];
 
+// atom type
+char atype[10];
 //  Function prototypes
 //  initialize positions on simple cubic lattice, also calls function to initialize velocities
 void initialize();  
@@ -107,13 +109,6 @@ int main()
   printf("                  TITLE ENTERED AS '%s'\n",prefix);
   printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 
-
-  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-  printf("  ARE YOU READY TO PROCEED WITH THE SIMULATION?\n");  
-  printf("  TYPE 'yes' THEN PRESS 'return' TO CONTINUE\n");
-  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-  scanf("%s",trash);
-
  /*     Table of values for Argon relating natural units to SI units:
   *     These are derived from Lennard-Jones parameters from the article
   *     "Liquid argon: Monte carlo and molecular dynamics calculations"
@@ -131,11 +126,74 @@ int main()
   //  Edit these factors to be computed in terms of basic properties in natural units of 
   //  the gas being simulated
 
-  VolFac = 3.7949992920124995e-29;
-  PressFac = 51695201.06691862;
-  TempFac = 142.0950000000000;
-  timefac = 2.09618e-12;
+  
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("  WHICH NOBLE GAS WOULD YOU LIKE TO SIMULATE? (DEFAULT IS ARGON)\n");
+  printf("\n  FOR HELIUM,  TYPE 'He' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  FOR NEON,    TYPE 'Ne' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  FOR ARGON,   TYPE 'Ar' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  FOR KRYPTON, TYPE 'Kr' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  FOR XENON,   TYPE 'Xe' THEN PRESS 'return' TO CONTINUE\n");
+  printf("  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  scanf("%s",atype);
 
+  if (strcmp(atype,"He")==0) {
+
+    VolFac = 1.8399744000000005e-29;
+    PressFac = 8152287.336171632;
+    TempFac = 10.864459551225972;
+    timefac = 1.7572698825166272e-12;
+    //strcpy(atype,"He");
+
+  }
+  else if (strcmp(atype,"Ne")==0) {
+
+    VolFac = 2.0570823999999997e-29;
+    PressFac = 27223022.27659913;
+    TempFac = 40.560648991243625;
+    timefac = 2.1192341945685407e-12;
+    //strcpy(atype,"Ne");
+
+  }
+  else if (strcmp(atype,"Ar")==0) {
+
+    VolFac = 3.7949992920124995e-29;
+    PressFac = 51695201.06691862;
+    TempFac = 142.0950000000000;
+    timefac = 2.09618e-12;
+    //strcpy(atype,"Ar");
+
+  }
+  else if (strcmp(atype,"Kr")==0) {
+
+    VolFac = 4.5882712000000004e-29;
+    PressFac = 59935428.40275003;
+    TempFac = 199.1817584391428;
+    timefac = 8.051563913585078e-13;
+    //strcpy(atype,"Kr");
+
+  }
+  else if (strcmp(atype,"Xe")==0) {
+
+    VolFac = 5.4872e-29;
+    PressFac = 70527773.72794868;
+    TempFac = 280.30305642163006;
+    timefac = 9.018957925790732e-13;
+    //strcpy(atype,"Xe");
+
+  }
+  else { 
+
+    VolFac = 3.7949992920124995e-29;
+    PressFac = 51695201.06691862;
+    TempFac = 142.0950000000000;
+    timefac = 2.09618e-12;
+    strcpy(atype,"Ar");
+ 
+  }
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  printf("\n                     YOU ARE SIMULATING %s GAS! \n",atype);
+  printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 
   printf("\n  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
   printf("\n  YOU WILL NOW ENTER A FEW SIMULATION PARAMETERS\n");
@@ -212,7 +270,8 @@ int main()
   //  We will run the simulation for NumTime timesteps.
   //  The total time will be NumTime*dt in natural units
   //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
-  int NumTime=50000;
+  //int NumTime=50000;
+  int NumTime=500;
   int tenp = floor(NumTime/10);
   printf("  PERCENTAGE OF CALCULATION COMPLETE:\n  [");
   for (i=0; i<NumTime+1; i++) {
@@ -492,7 +551,7 @@ double VelocityVerlet(double dt, int iter, FILE *fp) {
   }
 
   for (i=0; i<N; i++) {
-    fprintf(fp," Ar  ");
+    fprintf(fp,"%s",atype);
     for (j=0; j<3; j++) {
       fprintf(fp,"  %12.10e ",r[i][j]);
     }
