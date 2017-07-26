@@ -247,7 +247,10 @@ int main()
   ofp = fopen(ofn,"w");     //  Output of other quantities (T, P, gc, etc) at every timestep
   afp = fopen(afn,"w");    //  Average T, P, gc, etc from the simulation
 
-  dt = 0.01;  // dt = 0.01 natural units of time!
+  // dt in natural units of time s.t. in SI it is 10 f.s.
+  dt = 1.e-14/timefac;
+ 
+  //dt = 0.01;  // dt = 0.01 natural units of time!
 
   //  Put all the atoms in simple crystal lattice and give them random velocities
   //  that corresponds to the initial temperature we have specified
@@ -270,8 +273,9 @@ int main()
   //  We will run the simulation for NumTime timesteps.
   //  The total time will be NumTime*dt in natural units
   //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
-  //int NumTime=50000;
-  int NumTime=2000;
+  int NumTime=10000;
+  //int NumTime=5000;
+  
   int tenp = floor(NumTime/10);
   printf("  PERCENTAGE OF CALCULATION COMPLETE:\n  [");
   for (i=0; i<NumTime+1; i++) {
