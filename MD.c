@@ -271,7 +271,7 @@ int main()
   //  The total time will be NumTime*dt in natural units
   //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
   //int NumTime=50000;
-  int NumTime=500;
+  int NumTime=2000;
   int tenp = floor(NumTime/10);
   printf("  PERCENTAGE OF CALCULATION COMPLETE:\n  [");
   for (i=0; i<NumTime+1; i++) {
@@ -335,7 +335,13 @@ int main()
   printf("\n  TO ANIMATE YOUR SIMULATION, OPEN THE FILE \n  '%s' WITH VMD AFTER THE SIMULATION COMPLETES\n",tfn);
   printf("\n  TO ANALYZE INSTANTANEOUS DATA ABOUT YOUR MOLECULE, OPEN THE FILE \n  '%s' WITH YOUR FAVORITE TEXT EDITOR OR IMPORT THE DATA INTO EXCEL\n",ofn);
   printf("\n  THE FOLLOWING THERMODYNAMIC AVERAGES WILL BE COMPUTED AND WRITTEN TO THE FILE  \n  '%s':\n",afn);
-  printf("\n  AVERAGE TEMPERATURE (K)\n  AVERAGE PRESSURE (kPa) \n  THE GAS CONSTANT (J * mol^-1 K^-1)\n  THE COMPRESSIBILITY (unitless) \n  TOTAL VOLUME (L) \n  NUMBER OF PARTICLES (unitless \n");
+  printf("\n  AVERAGE TEMPERATURE (K):                 %15.5f\n",Tavg);
+  printf("\n  AVERAGE PRESSURE (kPa):                  %15.5f\n",Pavg);  
+  printf("\n  THE GAS CONSTANT (J * mol^-1 K^-1):      %15.5f\n",gc);
+  printf("\n  THE PERCENT ERROR IN THE GAS CONSTANT:   %15.5f\n",100*fabs(gc-8.3144598)/8.3144598);
+  printf("\n  THE COMPRESSIBILITY (unitless):          %15.5f \n",Z);
+  printf("\n  TOTAL VOLUME (m^3):                      %10.5e \n",Vol*VolFac);
+  printf("\n  NUMBER OF PARTICLES (unitless):          %i \n", N);
 
 
 

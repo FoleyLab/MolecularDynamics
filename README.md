@@ -4,7 +4,7 @@
 # A copy of the gnu public license (LICENSE.md) should be included.
 
 # To compile this code using a gnu C/C++ compiler and create an executable called 'MD.exe' in a Linux/Unix environment, type
-  g++ -o MD.exe MD.c
+  g++ -o MD.exe MD.c -O3
   
 # To run the program in a Linux/Unix environment, type
   ./MD.exe &
