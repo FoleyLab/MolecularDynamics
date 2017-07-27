@@ -332,7 +332,7 @@ int main()
   Tavg /= NumTime;
   Z = Pavg*(Vol*VolFac)/(N*kBSI*Tavg);
   gc = NA*Pavg*(Vol*VolFac)/(N*Tavg);
-  fprintf(afp,"  Total Time (s)      T (K)               P (Pa)        R (J/(mol K))         Z           V (m^3)              N\n");
+  fprintf(afp,"  Total Time (s)      T (K)               P (Pa)      PV/nT (J/(mol K))         Z           V (m^3)              N\n");
   fprintf(afp," --------------   -----------        ---------------   --------------   ---------------   ------------   -----------\n");
   fprintf(afp,"  %8.4e  %15.5f       %15.5f     %10.5f       %10.5f        %10.5e         %i\n",i*dt*timefac,Tavg,Pavg,gc,Z,Vol*VolFac,N);
 
