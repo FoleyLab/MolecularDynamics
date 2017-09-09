@@ -4,8 +4,8 @@ CFLAGS     = -O3
 EXEC       = MD.exe
 CXX        = g++
 
-${EXEC}: MD.c
-	${CXX} ${CFLAGS} ${INCLUDE} ${LIB} MD.c -o ${EXEC}
+${EXEC}: MD.cpp
+	${CXX} ${CFLAGS} ${INCLUDE} ${LIB} MD.cpp -o ${EXEC}
 
 clean:
 	rm -f *.o
