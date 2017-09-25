@@ -340,7 +340,7 @@ int main()
   printf("\n  TO ANALYZE INSTANTANEOUS DATA ABOUT YOUR MOLECULE, OPEN THE FILE \n  '%s' WITH YOUR FAVORITE TEXT EDITOR OR IMPORT THE DATA INTO EXCEL\n",ofn);
   printf("\n  THE FOLLOWING THERMODYNAMIC AVERAGES WILL BE COMPUTED AND WRITTEN TO THE FILE  \n  '%s':\n",afn);
   printf("\n  AVERAGE TEMPERATURE (K):                 %15.5f\n",Tavg);
-  printf("\n  AVERAGE PRESSURE (kPa):                  %15.5f\n",Pavg);  
+  printf("\n  AVERAGE PRESSURE  (Pa):                  %15.5f\n",Pavg);  
   printf("\n  PV/nT (J * mol^-1 K^-1):                 %15.5f\n",gc);
   printf("\n  PERCENT ERROR of pV/nT AND GAS CONSTANT: %15.5f\n",100*fabs(gc-8.3144598)/8.3144598);
   printf("\n  THE COMPRESSIBILITY (unitless):          %15.5f \n",Z);
