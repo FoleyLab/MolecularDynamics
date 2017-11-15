@@ -277,6 +277,7 @@ int main()
   //int NumTime=5000;
   
   int tenp = floor(NumTime/10);
+  fprintf(ofp,"  time (s)              T(t) (K)              P(t) (Pa)           Kinetic En. (n.u.)     Potential En. (n.u.) Total En. (n.u.)\n");
   printf("  PERCENTAGE OF CALCULATION COMPLETE:\n  [");
   for (i=0; i<NumTime+1; i++) {
 
@@ -321,7 +322,7 @@ int main()
     Tavg += Temp;
     Pavg += Press;
 
-    fprintf(ofp,"  %8.4f  %20.8f  %20.8f %20.8f  %20.8f  %20.8f \n",i*dt,Temp,Press,KE, PE, KE+PE);
+    fprintf(ofp,"  %8.4e  %20.8f  %20.8f %20.8f  %20.8f  %20.8f \n",i*dt*timefac,Temp,Press,KE, PE, KE+PE);
 
 
   }
