@@ -66,7 +66,7 @@ void initialize();
 //  update positions and velocities using Velocity Verlet algorithm 
 //  print particle coordinates to file for rendering via VMD or other animation software
 //  return 'instantaneous pressure'
-double VelocityVerlet(double dt, int iter, FILE *fp);  
+double VelocityVerlet(double dt, int iter, FILE *fp, int pflag);  
 //  Compute Force using F = -dV/dr
 //  solve F = ma for use in Velocity Verlet
 void computeAccelerations();
@@ -80,7 +80,8 @@ double Potential();
 double MeanSquaredVelocity();
 //  Compute total kinetic energy from particle mass and velocities
 double Kinetic();
-
+//  Test timestep dt
+void TestDt(double trial_dt, double time_fac, double *pmean, double *tmean);
 int main()
 {
 
@@ -249,7 +250,36 @@ int main()
 
   // dt in natural units of time s.t. in SI it is 10 f.s.
   dt = 1.e-14/timefac;
- 
+
+  double pm1, pm2, tm1, tm2;
+  double perror, terror, temp_dt;
+  temp_dt = dt;
+  TestDt(temp_dt, timefac, &pm1, &tm1);
+
+  int largeError=1;
+  int tries=0;
+  printf("  GOING TO CHECK NUMERICAL STABILITY WITH THE CURRENT TIME STEP dt = %12.10e s\n",dt*timefac);
+  do {
+          temp_dt = 0.5*dt;
+      	  TestDt(temp_dt, timefac, &pm2, &tm2);
+
+	  perror = fabs((pm2-pm1)/pm2);
+	  terror = fabs((tm2-tm1)/tm2);
+	  if (perror>0.1 || terror>0.1) {
+		  largeError=1;
+                  dt = temp_dt;
+		  printf("  VELOCITY-VERLET UNSTABLE, REFINING TIMESTEP TO dt = %12.10e s\n",temp_dt*timefac);
+		  pm1 = pm2;
+		  tm1 = tm2;
+		  tries++;
+	  }
+	
+	  else largeError=0;
+
+  }while(largeError);
+  printf("  USING %12.10e AS THE TIME-STEP, VELOCITY VERLET TESTED TO BE STABLE!\n",dt*timefac);
+  // Let's see if dt is small enough to make the dynamics stable!
+
   //dt = 0.01;  // dt = 0.01 natural units of time!
 
   //  Put all the atoms in simple crystal lattice and give them random velocities
@@ -270,9 +300,11 @@ int main()
   Pavg = 0;
   Tavg = 0;
 
+  // Let's see if dt needs adjusting
+
   //  We will run the simulation for NumTime timesteps.
   //  The total time will be NumTime*dt in natural units
-  //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
+  //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds  
   int NumTime=10000;
   //int NumTime=5000;
   
@@ -298,7 +330,7 @@ int main()
     // This updates the positions and velocities using Newton's Laws
     // Also computes the Pressure as the sum of momentum changes from wall collisions / timestep
     // which is a Kinetic Theory of gasses concept of Pressure
-    Press = VelocityVerlet(dt, i+1, tfp);
+    Press = VelocityVerlet(dt, i+1, tfp, 1);
     Press *= PressFac;
 
     //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -521,7 +553,7 @@ void computeAccelerations() {
 }
 
 // returns sum of dv/dt*m/A (aka Pressure) from elastic collisions with walls
-double VelocityVerlet(double dt, int iter, FILE *fp) {
+double VelocityVerlet(double dt, int iter, FILE *fp, int pflag) {
   int i, j, k;
  
   double psum = 0.;
@@ -536,9 +568,7 @@ double VelocityVerlet(double dt, int iter, FILE *fp) {
 
       v[i][j] += 0.5*a[i][j]*dt;
     }
-    //printf("  %i  %6.4e   %6.4e   %6.4e\n",i,r[i][0],r[i][1],r[i][2]);
   }
-  //  Update accellerations from updated positions
   computeAccelerations();
   //  Update velocity with updated acceleration
   for (i=0; i<N; i++) {
@@ -561,15 +591,16 @@ double VelocityVerlet(double dt, int iter, FILE *fp) {
     }
   }
 
-  for (i=0; i<N; i++) {
-    fprintf(fp,"%s",atype);
-    for (j=0; j<3; j++) {
-      fprintf(fp,"  %12.10e ",r[i][j]);
-    }
-    fprintf(fp,"\n");
+  // Don't print coordinates unless pflag==1
+  if (pflag==1) {
+	  for (i=0; i<N; i++) {
+	      	  fprintf(fp,"%s",atype);
+	      	  for (j=0; j<3; j++) {
+		    	  fprintf(fp,"  %12.10e ",r[i][j]);
+	      	  }
+	      	  fprintf(fp,"\n");
+	  }
   }
-  //fprintf(fp,"\n \n");
-
   return psum/(6*L*L);
 }
 
@@ -662,3 +693,40 @@ double gaussdist() {
 
 }
 }
+
+// Will compute quantities related to average pressure and mean temperature 
+void TestDt(double trial_dt, double time_fac, double *pmean, double *tmean) {
+  FILE *tfp;
+  tfp = fopen("tmp.txt","a");
+  // trial time in atomic units
+  double total_time = 1e-14*500/time_fac;
+  // Integer number of time-steps needed to achieve that time with current dt
+  int ntime = (int)(total_time/trial_dt);
+
+  initialize();
+  //  Based on their positions, calculate the ininial intermolecular forces
+  //  The accellerations of each particle will be defined from the forces and their
+  //  mass, and this will allow us to update their positions via Newton's law
+  computeAccelerations();
+
+  //  The variables need to be set to zero initially
+  double Pavg = 0;
+  double Tavg = 0;
+  double Press, mvs;
+  for (int i=0; i<ntime; i++) {
+
+    Press = VelocityVerlet(trial_dt, i+1, tfp, 0);
+    mvs = MeanSquaredVelocity();
+
+    Pavg += Press;
+    Tavg += mvs;
+
+  }
+
+  fclose(tfp);
+  *pmean = Pavg / ntime;
+  *tmean = Tavg / ntime;
+
+ 
+}
+
