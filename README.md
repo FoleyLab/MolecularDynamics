@@ -1,6 +1,6 @@
 - Source code for Molecular Dynamics Program - can compile and run on Linux, Windows, and Mac OSX
 
-- More information about this program, including detailed instructions for its use, can be found [here](https://pubs.acs.org/doi/suppl/10.1021/acs.jchemed.7b00747)
+- More information about this program, including detailed instructions for its use, can be found [here for instructions](https://pubs.acs.org/doi/suppl/10.1021/acs.jchemed.7b00747) and [here for discussion of its use in an undergraduate laboratory setting](https://pubs.acs.org/doi/pdf/10.1021/acs.jchemed.7b00747)
 
 - This folder should containt the source code (MD.cpp) and a makefile which can be used to compile the source to a machine-executable file.
 
