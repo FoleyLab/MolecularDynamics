@@ -247,7 +247,11 @@ int main()
   ofp = fopen(ofn,"w");     //  Output of other quantities (T, P, gc, etc) at every timestep
   afp = fopen(afn,"w");    //  Average T, P, gc, etc from the simulation
 
-  // dt in natural units of time s.t. in SI it is 10 f.s.
+  // dt in natural units of time s.t. in SI it is 5 fs for helium
+  if (strcmp(atype,"He")==0) {
+    dt = 0.5e-14/timefac;
+  }
+  // dt in natural units of time s.t. in SI it is 10 f.s. for all other gasses
   dt = 1.e-14/timefac;
  
   //dt = 0.01;  // dt = 0.01 natural units of time!
