@@ -247,14 +247,8 @@ int main()
   ofp = fopen(ofn,"w");     //  Output of other quantities (T, P, gc, etc) at every timestep
   afp = fopen(afn,"w");    //  Average T, P, gc, etc from the simulation
 
-  // dt in natural units of time s.t. in SI it is 5 fs for helium
-  if (strcmp(atype,"He")==0) {
-    dt = 0.5e-14/timefac;
-  }
-  // dt in natural units of time s.t. in SI it is 10 f.s. for all other gasses
-  dt = 1.e-14/timefac;
- 
-  //dt = 0.01;  // dt = 0.01 natural units of time!
+  // dt in natural units of time s.t. in SI it is 5 f.s. for all other gasses
+  dt = 0.5-14/timefac;
 
   //  Put all the atoms in simple crystal lattice and give them random velocities
   //  that corresponds to the initial temperature we have specified
@@ -277,7 +271,7 @@ int main()
   //  We will run the simulation for NumTime timesteps.
   //  The total time will be NumTime*dt in natural units
   //  And NumTime*dt multiplied by the appropriate conversion factor for time in seconds
-  int NumTime=10000;
+  int NumTime=20000;
   //int NumTime=5000;
   
   int tenp = floor(NumTime/10);
