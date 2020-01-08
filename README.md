@@ -16,7 +16,7 @@
 
 - The program will run interactively.  Follow the prompts to customize your simulation
 
-- *Note for Windows users on Cygwin installation:*  Our J. Chem. Ed. article suggests installing **all** Cygwin packages, which is quite large and time consuming.  Success with a much lighter installation has been reported 
+*Note for Windows users on Cygwin installation:*  Our J. Chem. Ed. article suggests installing **all** Cygwin packages, which is quite large and time consuming.  Success with a much lighter installation has been reported 
 by selecting the default package installation plus 3 additional packages under the "devel" sub-heading.
 As accessed on 01/08/2020, these packages and version numbers are as follows:
 
