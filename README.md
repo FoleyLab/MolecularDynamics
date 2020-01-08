@@ -16,3 +16,5 @@
 
 - The program will run interactively.  Follow the prompts to customize your simulation
 
+- *Note for Windows users on Cygwin installation*
+
