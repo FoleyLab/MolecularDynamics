@@ -1,3 +1,30 @@
+## Python package (`noblegasmd`)
+
+A `pip install`-able, numba-accelerated Python port of the same NVE Lennard-Jones engine,
+runnable with zero build step (e.g. in Google Colab). `MD.cpp` below remains the authoritative
+physics reference; the port is validated against it (see `tests/`).
+
+```bash
+pip install noblegasmd
+```
+
+```python
+from noblegasmd import run, sweep
+
+result = run(gas="Ar", T=300.0, rho=40.0)
+print(result.Z, result.P_avg, result.T_avg)
+
+df = sweep(gas="Ar", T=[100, 200, 300, 400], rho=[1, 40, 500, 2000], n_replicates=3)
+```
+
+See [`notebooks/reproduce_figure4.ipynb`](notebooks/reproduce_figure4.ipynb) to regenerate the
+published quasi-isotherms, and [`MD_python_port_spec.md`](MD_python_port_spec.md) for the full
+port specification. Development install: `pip install -e ".[dev]"`, then `pytest`.
+
+---
+
+## C++ reference implementation (`MD.cpp`)
+
 - Source code for Molecular Dynamics Program - can compile and run on Linux, Windows, and Mac OSX
 
 - More information about this program, including detailed instructions for its use, can be found [here for instructions](https://pubs.acs.org/doi/suppl/10.1021/acs.jchemed.7b00747) and [here for discussion of its use in an undergraduate laboratory setting](https://pubs.acs.org/doi/pdf/10.1021/acs.jchemed.7b00747)

@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "noblegasmd"
+version = "0.1.0"
+description = "Numba port of the NVE Lennard-Jones noble-gas MD engine from MD.cpp (Foley, Sweet, Akinfenwa)"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Jonathan J. Foley IV" },
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "numpy>=1.23",
+    "numba>=0.58",
+    "pandas>=1.5",
+]
+
+[project.optional-dependencies]
+notebook = ["matplotlib>=3.5"]
+dev = ["pytest>=7.0", "matplotlib>=3.5"]
+
+[project.urls]
+Homepage = "https://github.com/jayfoleyiv/MolecularDynamics"
+Repository = "https://github.com/jayfoleyiv/MolecularDynamics"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/noblegasmd"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
