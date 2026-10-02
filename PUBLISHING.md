@@ -19,7 +19,7 @@ document covers what's already prepared and what a human needs to do.
    - On [test.pypi.org](https://test.pypi.org) and/or
      [pypi.org](https://pypi.org), create (or claim) the `noblegasmd` project,
      then under its "Publishing" settings add a trusted publisher pointing at:
-     - Repository: `jayfoleyiv/MolecularDynamics` (or wherever this ends up)
+     - Repository: `FoleyLab/MolecularDynamics`
      - Workflow: `.github/workflows/release.yml`
      - Environment: `testpypi` or `pypi` (must match the workflow's
        `environment:` field for that job)
